@@ -21,6 +21,10 @@ public class PlayerMovement : MonoBehaviour
         _xRotation = 0f;
         _playerCamera.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
         transform.rotation = Quaternion.Euler(0f, 0f, 0f); // Réinitialise la rotation du joueur
+
+        //ResourceManager.Instance.AddResources(reward);
+        //ResourceManager.Instance.AddResources(reward);
+
     }
 
     void Update()
