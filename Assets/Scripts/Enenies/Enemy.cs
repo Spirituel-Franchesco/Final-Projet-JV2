@@ -1,76 +1,72 @@
-using System.Resources;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public int maxHealth = 100; // Vie maximale
-    public int health; // Vie actuelle
-    public int damage = 10; // Dégâts infligés au joueur
-    public int reward = 10; // Ressources octroyées au joueur à la mort
-    public float speed = 2f; // Vitesse de déplacement
-    public Animator animator; // Animation de l'ennemi
+    [SerializeField] private float _movementSpeed = 3f;
+    [SerializeField] private float _attackRange = 1.5f;
+    [SerializeField] private float _attackCooldown = 2f; // Temps entre deux attaques
+    [SerializeField] private int _damage = 10; // Dégâts infligés au héros
+    [SerializeField] private int _maxHealth = 100; // Vie maximale de l'ennemi
 
-    private bool isDead = false;
+    [SerializeField] private Transform _hero;
+    private AnimationLinker _animationLinker;
+    private float _lastAttackTime;
+    private int _currentHealth;
+    private bool _isAttacking;
 
     void Start()
     {
-        health = maxHealth;
+        _animationLinker = GetComponentInChildren<AnimationLinker>();
+        _currentHealth = _maxHealth;
+        //_hero = PlayerMovement._Instance.transform; // Trouver la référence au héros
     }
 
-    // Applique des dégâts à l'ennemi
-    public void TakeDamage(int damageAmount)
+    void Update()
     {
-        if (isDead) return; // Ne pas infliger de dégâts si déjà mort
+        if (_hero == null || _currentHealth <= 0) return;
 
-        health -= damageAmount;
-        if (health <= 0)
+        float distanceToHero = Vector3.Distance(transform.position, _hero.position);
+
+        if (distanceToHero > _attackRange)
         {
-            Die();
+            FollowHero();
         }
         else
         {
-            // Animation de dégâts (optionnelle)
-            if (animator != null)
+            if (!_isAttacking && Time.time > _lastAttackTime + _attackCooldown)
             {
-                animator.SetTrigger("Hit");
+                StartCoroutine(AttackHero());
             }
         }
     }
 
-    // Gère la mort de l'ennemi
-    protected virtual void Die()
+    private void FollowHero()
     {
-        isDead = true;
+        Vector3 direction = (_hero.position - transform.position).normalized;
+        transform.LookAt(_hero.position);
 
-        // Animation de mort
-        if (animator != null)
-        {
-            animator.SetTrigger("Die");
-        }
-
-        // Désactive le collider et le déplacement
-        GetComponent<Collider>().enabled = false;
-        GetComponent<Rigidbody>().isKinematic = true;
-
-        // Octroie des ressources au joueur
-        //ResourceManager.Instance.AddResources(reward);
-
-        // Détruit l'objet après un délai (pour laisser l'animation se jouer)
-        Destroy(gameObject, 2f);
+        transform.position += direction * _movementSpeed * Time.deltaTime;
+        _animationLinker.Walk();
     }
 
-    // Déplace l'ennemi vers la cible
-    public void MoveTowards(Vector3 targetPosition)
+    private System.Collections.IEnumerator AttackHero()
     {
-        if (isDead) return; // Ne pas bouger si mort
+        _isAttacking = true;
+        _animationLinker.Attack();
 
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-        transform.LookAt(targetPosition); // Oriente l'ennemi vers la cible
+        yield return new WaitForSeconds(0.5f); // Laisser l'animation d'attaque jouer
 
-        // Animation de marche/course
-        if (animator != null)
+        if (Vector3.Distance(transform.position, _hero.position) <= _attackRange)
         {
-            animator.SetBool("IsMoving", true);
+            //HeroHealth._Instance.TakeDamage(_damage);
         }
+        _lastAttackTime = Time.time;
+        _isAttacking = false;
+    }
+
+    private void Die()
+    {
+        _animationLinker.Death();
+        Destroy(gameObject, 2f); // Détruire l'ennemi après 2 secondes
     }
 }

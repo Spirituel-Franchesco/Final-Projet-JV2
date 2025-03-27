@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+    public static PlayerMovement _Instance;
+
     public float _moveSpeed = 5f; // Vitesse de déplacement
     public float _mouseSensitivity = 100f; // Sensibilité de la souris
 
