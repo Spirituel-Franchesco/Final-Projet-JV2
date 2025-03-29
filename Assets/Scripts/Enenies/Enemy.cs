@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private float _movementSpeed = 3f;
+    [SerializeField] private float _movementSpeed = 5f;
     [SerializeField] private float _attackRange = 1.5f;
     [SerializeField] private float _attackCooldown = 2f; // Temps entre deux attaques
     [SerializeField] private int _damage = 10; // Dégâts infligés au héros
@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
+            _animationLinker.Stop();
             if (!_isAttacking && Time.time > _lastAttackTime + _attackCooldown)
             {
                 StartCoroutine(AttackHero());
