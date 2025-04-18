@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _attackCooldown = 2f; // Temps entre deux attaques
     [SerializeField] private int _damage = 10; // Dégâts infligés au héros
     [SerializeField] private int _maxHealth = 100; // Vie maximale de l'ennemi
+
+    [SerializeField] private NavMeshAgent _navMeshAgent;
 
     [SerializeField] private Transform _hero;
     private AnimationLinker _animationLinker;
@@ -43,10 +46,11 @@ public class Enemy : MonoBehaviour
 
     private void FollowHero()
     {
-        Vector3 direction = (_hero.position - transform.position).normalized;
-        transform.LookAt(_hero.position);
+        _navMeshAgent.SetDestination(_hero.position);
 
-        transform.position += direction * _movementSpeed * Time.deltaTime;
+        //Vector3 direction = (_hero.position - transform.position).normalized;
+        //transform.LookAt(_hero.position);
+        //transform.position += direction * _movementSpeed * Time.deltaTime;
         _animationLinker.Walk();
     }
 

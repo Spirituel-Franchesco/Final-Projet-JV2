@@ -2,26 +2,28 @@ using UnityEngine;
 
 public class Shotgun : Gun
 {
-    public float spreadAngle = 30f; // Angle de dispersion
-    public int pellets = 8; // Nombre de projectiles
-    public float range = 50f; // Portée réduite
-    public Camera playerCamera;
-
-    protected override void HandleShoot()
+    private void Awake()
     {
-        for (int i = 0; i < pellets; i++)
-        {
-            Vector3 direction = playerCamera.transform.forward;
-            direction = Quaternion.Euler(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0) * direction;
+        gunName = "Shotgun";
+        damage = 50;
+        fireRate = 1.0f;
+        maxAmmo = 5;
+        ammo = maxAmmo;
+    }
 
-            RaycastHit hit;
-            if (Physics.Raycast(playerCamera.transform.position, direction, out hit, range))
+    public override void Shoot(Transform shootOrigin)
+    {
+        if (!CanShoot()) return;
+
+        UseAmmo();
+        Debug.Log("Shotgun tiré !");
+        RaycastHit hit;
+        if (Physics.Raycast(shootOrigin.position, shootOrigin.forward, out hit, 100f))
+        {
+            Enemy enemy = hit.collider.GetComponent<Enemy>();
+            if (enemy != null)
             {
-                Enemy enemy = hit.transform.GetComponent<Enemy>();
-                if (enemy != null)
-                {
-                    //enemy.TakeDamage(damage / pellets); // Dégâts divisés entre les projectiles
-                }
+                //enemy.TakeDamage(damage);
             }
         }
     }

@@ -71,7 +71,8 @@ public class DistantEnemy : MonoBehaviour
     {
         // Créer le projectile et le lancer
         GameObject projectile = Instantiate(_projectilePrefab, _shootPoint.position, Quaternion.identity);
-        Vector3 direction = (_hero.position - _shootPoint.position).normalized;
+        Vector3 direction = ((_hero.position + new Vector3(0, 8, 0)) - _shootPoint.position).normalized;
+        projectile.transform.forward = direction;
         projectile.GetComponent<Rigidbody>().velocity = direction * 10f; // Vitesse du projectile
 
         // Activer la destruction du projectile après un certain temps
