@@ -633,15 +633,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1dd3308ba930224487309d60dc9aeb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: 10
+  currentAmmo: -1
   maxAmmo: 10
-  shootCooldown: 0.5
+  reloadTime: 1
   price: 0
-  gunAnimator: {fileID: 0}
+  gunAnimator: {fileID: 625004627}
+  damage: 50
+  range: 100
+  impactForce: 30
+  fpsCam: {fileID: 3560258103413668702}
+  muzzleFlash: {fileID: 4319718813101893222, guid: 07ecd8fc67a1b6149ab9032f0d1c22fe, type: 3}
+  impactEffect: {fileID: 5024009746357069194, guid: 8a4aa0caf050ccf46a60808eaf64e957, type: 3}
   bulletPrefab: {fileID: 3575611928538805115, guid: 875e41314efa69c4d9ee7cec9c710d64, type: 3}
   firePoint: {fileID: 4528040502298177288}
-  pelletCount: 6
-  spreadAngle: 10
   shootSound: {fileID: 0}
 --- !u!1 &3233570105749292661
 GameObject:
@@ -1275,7 +1279,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3954770275668260047
 Transform:
   m_ObjectHideFlags: 0
@@ -1312,11 +1316,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10e09a073270dee4588071e7f879577b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: 100
-  maxAmmo: 100
-  shootCooldown: 0.5
+  currentAmmo: -1
+  maxAmmo: 10
+  reloadTime: 1
   price: 0
-  gunAnimator: {fileID: 0}
+  gunAnimator: {fileID: 625004627}
   damage: 5
   range: 100
   impactForce: 30
@@ -1379,12 +1383,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a691fab07002147bf28296c9a5e4dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: 10
+  currentAmmo: -1
   maxAmmo: 10
-  shootCooldown: 0.5
+  reloadTime: 1
   price: 0
-  gunAnimator: {fileID: 0}
-  damage: 40
+  gunAnimator: {fileID: 625004627}
+  damage: 25
   range: 100
   impactForce: 30
   fpsCam: {fileID: 3560258103413668702}
@@ -2315,6 +2319,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7888821123214750905}
+  - component: {fileID: 625004627}
+  - component: {fileID: 625004625}
   m_Layer: 0
   m_Name: WeaponHolder
   m_TagString: Untagged
@@ -2340,6 +2346,40 @@ Transform:
   m_Father: {fileID: 3560258103413668700}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &625004627
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9184175959516732267}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f627c5c06504a9d4cbc066b7102f3cbf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &625004625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9184175959516732267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db64a5f8cda138a4bbcd1436ecb25fd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedWeapon: 0
 --- !u!1001 &3560258102641975624
 PrefabInstance:
   m_ObjectHideFlags: 0

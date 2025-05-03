@@ -19,16 +19,6 @@ public class Fusil : Gun
     [SerializeField] private Transform firePoint;
     [SerializeField] private AudioSource shootSound;
 
-
-
-    private void Update()
-    {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Shoot();
-        }
-    }
-
     public override void Shoot()
     {
         //if (!canShoot || ammo <= 0) return;
@@ -49,6 +39,7 @@ public class Fusil : Gun
 
         muzzleFlash.Play(); // Play the muzzle flash effect
 
+        currentAmmo--; // Decrease ammo count
 
         RaycastHit hit;
         if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))

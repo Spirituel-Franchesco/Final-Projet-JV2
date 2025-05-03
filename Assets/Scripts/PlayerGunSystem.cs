@@ -84,7 +84,7 @@ public class PlayerGunSystem : MonoBehaviour
         if (money < price || currentGun == null) return;
 
         money -= price;
-        currentGun.Reload();
+        //currentGun.Reload();
         Debug.Log("Reload de " + currentGun);
     }
 

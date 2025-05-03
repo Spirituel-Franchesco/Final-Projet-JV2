@@ -42,28 +42,11 @@ public class PAGun : Gun
     public ParticleSystem muzzleFlash; // 
     public GameObject impactEffect; // Reference to the impact effect prefab
 
+
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform firePoint;
     [SerializeField] private AudioSource shootSound;
 
-  
-
-    private void Update()
-    {
-        if (currentAmmo <= 0) 
-        {
-            Reload();
-            return; // Reload if ammo is empty
-        }
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Shoot();
-        }
-    }
-
-
-    
 
     public override void Shoot()
     {
@@ -92,6 +75,14 @@ public class PAGun : Gun
             Destroy(impactGO, 2f); // Destroy the impact effect after 2 seconds
         }
     }
+    //public override void Reload()
+    //{
+    //    Debug.Log("Reloading...");
+    //    currentAmmo = maxAmmo;
+    //    //Invoke(nameof(ResetShoot), reloadTime);
+    //    //canShoot = false; // Disable shooting during reload
+    //    //Invoke(nameof(ResetShoot), reloadTime); // Re-enable shooting after reload time
+    //}
 
 
     private void ResetShoot() => canShoot = true;

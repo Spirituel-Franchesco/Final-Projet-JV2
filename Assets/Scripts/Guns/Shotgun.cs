@@ -56,8 +56,6 @@ public class ShotGun : Gun
     [SerializeField] private Transform firePoint;
     [SerializeField] private AudioSource shootSound;
 
-
-
     public override void Shoot()
     {
         //if (!canShoot || ammo <= 0) return;
@@ -86,6 +84,8 @@ public class ShotGun : Gun
 
 
         muzzleFlash.Play(); // Play the muzzle flash effect
+
+        currentAmmo--; // Decrease ammo count
 
 
         RaycastHit hit;

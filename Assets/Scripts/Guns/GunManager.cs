@@ -41,7 +41,7 @@ public class GunManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            TryReload();
+            //TryReload();
         }
 
         // Changement d'arme : touches 1, 2, 3
@@ -129,18 +129,18 @@ public class GunManager : MonoBehaviour
     }
 
 
-    public void TryReload()
-    {
-        if (money >= 10)
-        {
-            money -= 10;
-            currentGun?.Reload();
-        }
-        else
-        {
-            Debug.Log("Pas assez d'argent pour recharger");
-        }
-    }
+    //public void TryReload()
+    //{
+    //    if (money >= 10)
+    //    {
+    //        money -= 10;
+    //        currentGun?.Reload();
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("Pas assez d'argent pour recharger");
+    //    }
+    //}
 
     private void UpdateAmmoUI()
     {
