@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5890126981874568643}
   - component: {fileID: 5890126981874568641}
-  - component: {fileID: 5486431624374741708}
   - component: {fileID: 330547611707485304}
   - component: {fileID: 8454898518550159293}
-  - component: {fileID: 5770732519014037084}
   - component: {fileID: 423660942}
   - component: {fileID: 423660943}
+  - component: {fileID: 6100463133406439826}
+  - component: {fileID: 1003864885733978607}
   m_Layer: 0
   m_Name: EnemyDistant
   m_TagString: Enemy
@@ -55,20 +55,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!136 &5486431624374741708
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5890126981874568642}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  m_Radius: 3
-  m_Height: 20
-  m_Direction: 1
-  m_Center: {x: 0, y: 10, z: 0}
 --- !u!212 &330547611707485304
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -217,26 +203,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5770732519014037084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5890126981874568642}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 938148cd02a16ef46b8f59fa2832a934, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _projectilePrefab: {fileID: 407946712905865781, guid: 5efa20404138f5b40bdeba3671f416ca, type: 3}
-  _shootPoint: {fileID: 8622124566744104496}
-  _movementSpeed: 3
-  _attackRange: 15
-  _shootRange: 50
-  _attackCooldown: 2
-  _maxHealth: 100
-  _hero: {fileID: 0}
 --- !u!195 &423660942
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -275,12 +241,39 @@ MonoBehaviour:
   damage: 10
   maxHealth: 100
   attackRange: 1.5
-  hero: {fileID: 0}
+  hero: {fileID: 8590046695329821284, guid: 0eb15fd32ad25c4488056e2779aa1b5d, type: 3}
   agent: {fileID: 423660942}
   _projectilePrefab: {fileID: 407946712905865781, guid: 5efa20404138f5b40bdeba3671f416ca, type: 3}
   _shootPoint: {fileID: 8622124566744104496}
   _shootRange: 50
   _attackCooldown: 2
+--- !u!114 &6100463133406439826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890126981874568642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 011553742961df441b316d0bd26de854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemy: {fileID: 5890126981874568642}
+  _health: 10
+--- !u!65 &1003864885733978607
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890126981874568642}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5890126982073491661
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,7 +25,9 @@ public class WaveManager : MonoBehaviour
     private int enemiesAlive = 0;
     public float timeBetweenWaves = 1f;
 
+    private List<ParentEnemy> spawnedEnemies = new List<ParentEnemy>();
     private bool gameEnded = false;
+    private bool isSpawning = false;
 
     private void Awake()
     {
@@ -53,6 +55,16 @@ public class WaveManager : MonoBehaviour
 
         yield break;
     }
+
+    //private IEnumerator SpawnWave()
+    //{
+    //    isSpawning = true;
+
+    //    // ton code de spawn ici
+
+    //    isSpawning = false;
+    //}
+
 
     void SpawnWave()
     {
@@ -90,6 +102,21 @@ public class WaveManager : MonoBehaviour
                 //CheckVictoryCondition();
             }
         }
+    }
+
+    private void Update()
+    {
+        if (isSpawning) return;
+
+        //if (spawnedEnemies.Count == 0 && currentWave == waves.Count)
+        //{
+        //    if (heroHealth != null && heroHealth.IsAlive()) // méthode que tu peux ajouter si elle n’existe pas
+        //    {
+        //        victoryTextUI.SetActive(true);
+        //        Debug.Log("Victoire !");
+        //        // Ici tu peux appeler LoadEndMenu() ou autre selon ton système de score
+        //    }
+        //}
     }
 
     //void CheckVictoryCondition()

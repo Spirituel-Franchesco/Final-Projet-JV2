@@ -46,8 +46,8 @@ public class PlayerGunSystem : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (currentGun != null)
-                currentGun.Shoot(shootOrigin);
+            //if (currentGun != null)
+               // currentGun.Shoot(shootOrigin);
         }
     }
 

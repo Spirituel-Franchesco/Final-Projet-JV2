@@ -2,31 +2,39 @@ using UnityEngine;
 
 public abstract class Gun : MonoBehaviour
 {
-    public string gunName;
-    public int damage;
-    public int ammo;
-    public int maxAmmo;
-    public float fireRate;
-    public float reloadTime;
+    public int currentAmmo = -1;
+    public int maxAmmo = 10;
+    public float reloadTime = 1f; // Time taken to reload
+    public int price = 0;
 
-    protected float nextFireTime;
+    protected bool canShoot = true;
 
-    public abstract void Shoot(Transform shootOrigin);
+    [SerializeField] protected Animator gunAnimator;
+
+    private void Start()
+    {
+        if (currentAmmo == -1)
+        {
+            currentAmmo = maxAmmo; // Initialize current ammo
+        }
+        //else
+        //{
+        //    currentAmmo = maxAmmo; // Initialize current ammo
+        //}
+        //currentAmmo = maxAmmo; // Initialize current ammo
+    }
+
+    public abstract void Shoot();
 
     public virtual void Reload()
     {
-        ammo = maxAmmo;
-        Debug.Log($"{gunName} rechargé !");
+        Debug.Log("Reloading...");
+        currentAmmo = maxAmmo;
     }
 
-    public bool CanShoot()
-    {
-        return Time.time >= nextFireTime && ammo > 0;
-    }
-
-    protected void UseAmmo()
-    {
-        ammo--;
-        nextFireTime = Time.time + fireRate;
-    }
+    //protected void PlayShootAnimation()
+    //{
+    //    if (gunAnimator != null)
+    //        gunAnimator.SetTrigger("Shoot");
+    //}
 }
