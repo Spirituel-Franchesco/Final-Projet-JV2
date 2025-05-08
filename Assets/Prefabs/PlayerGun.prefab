@@ -633,20 +633,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1dd3308ba930224487309d60dc9aeb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentAmmo: -1
-  maxAmmo: 10
-  reloadTime: 1
-  price: 0
-  gunAnimator: {fileID: 625004627}
-  damage: 50
-  range: 100
-  impactForce: 30
-  fpsCam: {fileID: 3560258103413668702}
-  muzzleFlash: {fileID: 4319718813101893222, guid: 07ecd8fc67a1b6149ab9032f0d1c22fe, type: 3}
-  impactEffect: {fileID: 5024009746357069194, guid: 8a4aa0caf050ccf46a60808eaf64e957, type: 3}
-  bulletPrefab: {fileID: 3575611928538805115, guid: 875e41314efa69c4d9ee7cec9c710d64, type: 3}
-  firePoint: {fileID: 4528040502298177288}
-  shootSound: {fileID: 0}
+  _gunAnimator: {fileID: 625004627}
+  _reloadTime: 1
+  _currentAmmo: -1
+  _maxAmmo: 10
+  _price: 0
+  _bulletPrefab: {fileID: 6549037276459813257}
+  _firePoint: {fileID: 4528040502298177288}
+  _shootSound: {fileID: 0}
+  _fpsCamera: {fileID: 3560258103413668702}
+  _muzzleFlash: {fileID: 4319718813101893222, guid: 07ecd8fc67a1b6149ab9032f0d1c22fe, type: 3}
+  _impactEffect: {fileID: 5024009746357069194, guid: 8a4aa0caf050ccf46a60808eaf64e957, type: 3}
+  _damage: 40
+  _range: 100
+  _impactForce: 50
 --- !u!1 &3233570105749292661
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,7 +949,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!136 &3560258104167003065
 CapsuleCollider:
@@ -978,7 +978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 20
-  _mouseSensitivity: 100
+  _mouseSensitivity: 200
 --- !u!143 &3560258104167003067
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1316,20 +1316,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10e09a073270dee4588071e7f879577b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentAmmo: -1
-  maxAmmo: 10
-  reloadTime: 1
-  price: 0
-  gunAnimator: {fileID: 625004627}
-  damage: 5
-  range: 100
-  impactForce: 30
-  fpsCam: {fileID: 3560258103413668702}
-  muzzleFlash: {fileID: 763970084368945923}
-  impactEffect: {fileID: 5024009746357069194, guid: ec3f674830402cc45bce805cf6493db7, type: 3}
-  bulletPrefab: {fileID: 5341742223406746680, guid: 4c7ccf56ad55fb54c8f00f2c28e78841, type: 3}
-  firePoint: {fileID: 4528040503777089208}
-  shootSound: {fileID: 0}
+  _gunAnimator: {fileID: 625004627}
+  _reloadTime: 1
+  _currentAmmo: -1
+  _maxAmmo: 10
+  _price: 0
+  _bulletPrefab: {fileID: 3798645491681784309}
+  _firePoint: {fileID: 4528040503777089208}
+  _shootSound: {fileID: 0}
+  _fpsCam: {fileID: 3560258103413668702}
+  _muzzleFlash: {fileID: 4319718813101893222, guid: 07ecd8fc67a1b6149ab9032f0d1c22fe, type: 3}
+  _impactEffect: {fileID: 5024009746357069194, guid: 8a4aa0caf050ccf46a60808eaf64e957, type: 3}
+  _damage: 5
+  _range: 100
+  _impactForce: 25
 --- !u!1 &4443357592935736161
 GameObject:
   m_ObjectHideFlags: 0
@@ -1383,20 +1383,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a691fab07002147bf28296c9a5e4dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentAmmo: -1
-  maxAmmo: 10
-  reloadTime: 1
-  price: 0
-  gunAnimator: {fileID: 625004627}
-  damage: 25
-  range: 100
-  impactForce: 30
-  fpsCam: {fileID: 3560258103413668702}
-  muzzleFlash: {fileID: 4319718813101893222, guid: 07ecd8fc67a1b6149ab9032f0d1c22fe, type: 3}
-  impactEffect: {fileID: 5024009746357069194, guid: 8a4aa0caf050ccf46a60808eaf64e957, type: 3}
-  bulletPrefab: {fileID: 5341742223406746680, guid: 4c7ccf56ad55fb54c8f00f2c28e78841, type: 3}
-  firePoint: {fileID: 4528040503641113661}
-  shootSound: {fileID: 0}
+  _gunAnimator: {fileID: 625004627}
+  _reloadTime: 1
+  _currentAmmo: -1
+  _maxAmmo: 10
+  _price: 0
+  _bulletPrefab: {fileID: 2407158050065520140}
+  _firePoint: {fileID: 4528040503641113661}
+  _shootSound: {fileID: 0}
+  _fpsCam: {fileID: 3560258103413668702}
+  _muzzleFlash: {fileID: 4319718813101893222, guid: 07ecd8fc67a1b6149ab9032f0d1c22fe, type: 3}
+  _impactEffect: {fileID: 5024009746357069194, guid: 8a4aa0caf050ccf46a60808eaf64e957, type: 3}
+  _damage: 25
+  _range: 100
+  _impactForce: 30
 --- !u!1 &4872530049861577153
 GameObject:
   m_ObjectHideFlags: 0
@@ -2379,7 +2379,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db64a5f8cda138a4bbcd1436ecb25fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedWeapon: 0
+  _selectedWeapon: 0
 --- !u!1001 &3560258102641975624
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2651,8 +2651,3 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 07ecd8fc67a1b6149ab9032f0d1c22fe, type: 3}
---- !u!198 &763970084368945923 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4319718813101893222, guid: 07ecd8fc67a1b6149ab9032f0d1c22fe, type: 3}
-  m_PrefabInstance: {fileID: 3560258103525291365}
-  m_PrefabAsset: {fileID: 0}

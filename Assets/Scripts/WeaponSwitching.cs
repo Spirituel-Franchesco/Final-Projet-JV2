@@ -2,7 +2,7 @@
 
 public class WeaponSwitching : MonoBehaviour
 {
-    public int selectedWeapon = 0; // Index of the currently selected weapon
+    public int _selectedWeapon = 0; // Index of the currently selected weapon
 
     // Start is called before the first frame update
     void Start()
@@ -13,56 +13,36 @@ public class WeaponSwitching : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int previousSelectedWeapon = selectedWeapon;
+        int previousSelectedWeapon = _selectedWeapon;
 
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // Scroll up
-        {
-            if (selectedWeapon >= transform.childCount - 1)
-            {
-                selectedWeapon = 0;
-            }
-            else
-            {
-                selectedWeapon++;
-            }
-        }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0f) // Scroll down
-        {
-            if (selectedWeapon <= 0)
-            {
-                selectedWeapon = transform.childCount - 1;
-            }
-            else
-            {
-                selectedWeapon--;
-            }
-        }
-
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //if (Input.GetAxis("Mouse ScrollWheel") > 0f) // Scroll up
         //{
-        //    selectedWeapon = 0;
+        //    if (_selectedWeapon >= transform.childCount - 1)
+        //    {
+        //        _selectedWeapon = 0;
+        //    }
+        //    else
+        //    {
+        //        _selectedWeapon++;
+        //    }
+        //}
+        //if (Input.GetAxis("Mouse ScrollWheel") < 0f) // Scroll down
+        //{
+        //    if (_selectedWeapon <= 0)
+        //    {
+        //        _selectedWeapon = transform.childCount - 1;
+        //    }
+        //    else
+        //    {
+        //        _selectedWeapon--;
+        //    }
         //}
 
-        //if (Input.GetKeyDown(KeyCode.Alpha2) && transform.childCount > 2)
+        //if (previousSelectedWeapon != _selectedWeapon)
         //{
-        //    selectedWeapon = 1;
+        //    SelectWeapon();
         //}
-
-        //if (Input.GetKeyDown(KeyCode.Alpha3) && transform.childCount > 3)
-        //{
-        //    selectedWeapon = 2;
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.Alpha4) && transform.childCount > 4)
-        //{
-        //    selectedWeapon = 3;
-        //}
-
-        if (previousSelectedWeapon != selectedWeapon)
-        {
-            SelectWeapon();
-        }
     }
 
     void SelectWeapon() 
@@ -70,7 +50,7 @@ public class WeaponSwitching : MonoBehaviour
         int i = 0;
         foreach (Transform weapon in transform)
         {
-            if (i == selectedWeapon)
+            if (i == _selectedWeapon)
             {
                 weapon.gameObject.SetActive(true);
             }

@@ -1,36 +1,40 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class MeleeEnemy : ParentEnemy
 {
     protected override void Move()
     {
-        if (agent == null) return;
+        if (_agent == null) return;
 
-        if (EnemyManager.Instance.ShouldAttackPlayer(this))
+        if (EnemyManager._Instance.ShouldAttackPlayer(this))
         {
-            agent.SetDestination(hero.position);
+            _agent.isStopped = false;
+            _agent.SetDestination(_hero.position);
         }
         else
         {
-            agent.SetDestination(EnemyManager.Instance.GetExit().position);
+            _agent.isStopped = false;
+            _agent.SetDestination(EnemyManager._Instance.GetExit().position);
         }
 
-        animationLinker.Walk();
+        _animationLinker.WalkAnimation();
     }
 
-    protected override System.Collections.IEnumerator Attack()
+    protected override IEnumerator Attack()
     {
-        isAttacking = true;
-        animationLinker.Attack();
+        _agent.isStopped = true;
 
-        yield return new WaitForSeconds(0.5f);
+        Debug.Log("Melee enemy attacking");
 
-        if (Vector3.Distance(transform.position, hero.position) <= attackRange)
+        yield return null;
+
+        if (Vector3.Distance(transform.position, _hero.position) <= _attackRange)
         {
-            //HeroHealth._Instance.TakeDamage(damage);
+            HeroHealth._Instance.TakeDamage(_damage);
         }
 
-        lastAttackTime = Time.time;
-        isAttacking = false;
+        _agent.isStopped = false;
+        _lastAttackTime = Time.time;
     }
 }

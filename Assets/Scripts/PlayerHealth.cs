@@ -3,20 +3,20 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public int maxHealth = 100;
-    public int currentHealth;
-    public Slider healthSlider;
+    public Slider _healthSlider;
+    public int _maxHealth = 100;
+    public int _currentHealth;
 
     void Start()
     {
-        currentHealth = maxHealth;
+        _currentHealth = _maxHealth;
         UpdateHealthUI();
     }
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        if (currentHealth <= 0)
+        _currentHealth -= damage;
+        if (_currentHealth <= 0)
         {
             Die();
         }
@@ -25,9 +25,9 @@ public class PlayerHealth : MonoBehaviour
 
     private void UpdateHealthUI()
     {
-        if (healthSlider != null)
+        if (_healthSlider != null)
         {
-            healthSlider.value = (float)currentHealth / maxHealth;
+            _healthSlider.value = (float)_currentHealth / _maxHealth;
         }
     }
 

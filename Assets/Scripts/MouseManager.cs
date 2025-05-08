@@ -1,14 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MouseManager : MonoBehaviour
 {
-    public bool cursorVisible = false;
+    public bool _cursorVisible = false;
 
     void Start()
     {
-        SetCursor(cursorVisible);
+        SetCursor(_cursorVisible);
     }
 
     public void SetCursor(bool visible)

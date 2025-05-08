@@ -48,13 +48,13 @@ public class DistantEnemy : MonoBehaviour
         transform.LookAt(_hero.position);
 
         transform.position += direction * _movementSpeed * Time.deltaTime;
-        _animationLinker.Walk();
+        _animationLinker.WalkAnimation();
     }
 
     private System.Collections.IEnumerator ShootProjectile()
     {
         _isAttacking = true;
-        _animationLinker.Attack();
+        _animationLinker.AttackAnimation();
 
 
         yield return new WaitForSeconds(0.5f); // Laisser l'animation d'attaque jouer
@@ -82,7 +82,7 @@ public class DistantEnemy : MonoBehaviour
     private void Die()
     {
         _animationLinker.GetComponentInChildren<AnimationLinker>();
-        _animationLinker.Death();
+        _animationLinker.DeathAnimation();
         Destroy(gameObject, 2f); // Détruire l'ennemi après 2 secondes
     }
 

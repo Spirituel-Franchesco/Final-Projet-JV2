@@ -1,24 +1,58 @@
 ﻿using UnityEngine;
+using TMPro;
+using System;
 
 public class ResourceManager : MonoBehaviour
 {
-    public static ResourceManager Instance;
+    public static ResourceManager _Instance;
 
-    private int gold = 0;
+    private int _resources = 0;
 
-    private void Awake()
+    [SerializeField] private TextMeshProUGUI _resourceText;
+
+
+    public event Action OnResourceChanged;
+
+    void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (_Instance != null)
+        {
+            Debug.LogError("Il y a déjà un ResourceManager dans la scène !");
+            return;
+        }
+
+        _Instance = this;
     }
 
-    public void AddGold(int amount)
+
+    public void AddResource(int amount)
     {
-        gold += amount;
-        //Debug.Log("💰 Or total : " + gold);
-        Debug.Log("Or total : " + gold);
-        // mettre à jour UI si besoin
+        _resources += amount;
+        UpdateUI();
+        OnResourceChanged?.Invoke();
     }
 
-    public int GetGold() => gold;
+    public bool SpendResource(int amount)
+    {
+        if (_resources >= amount)
+        {
+            _resources -= amount;
+            UpdateUI();
+            OnResourceChanged?.Invoke();
+            return true;
+        }
+
+        return false;
+    }
+
+    public int GetCurrentResource() => _resources;
+
+    private void UpdateUI()
+    {
+        if (_resourceText != null)
+            _resourceText.text = "Ressources : " + _resources;
+    }
+
+
+
 }

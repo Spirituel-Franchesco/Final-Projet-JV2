@@ -2,22 +2,47 @@ using UnityEngine;
 
 public class AimPoint : MonoBehaviour
 {
-    public float health = 50f;
+    //[SerializeField] private GameObject _enemy;
+    //public Animator _animator;
+    //public int _health = 100;
 
-    public void TakeDamage(float amount)
+    //public void TakeDamage(int amount)
+    //{
+    //    //amount = 10; // Exemple de valeur de dégâts
+    //    _health -= amount;
+    //    Debug.Log(_enemy.name + " took " + amount + " damage. Remaining health: " + _health);
+
+    //    if (_health <= 0)
+    //    {
+    //        Die();
+    //    }
+    //}
+
+    //private void Die()
+    //{
+    //    Debug.Log(_enemy.name + " has been destroyed!");
+    //    Destroy(_enemy, 2f);
+    //}
+
+    [SerializeField] private int _health = 100; // Santé initiale
+    [SerializeField] private ParentEnemy _parentEnemy;
+
+    public void TakeDamage(int amount)
     {
-        health -= amount;
-        Debug.Log(gameObject.name + " took " + amount + " damage. Remaining health: " + health);
+        _health -= amount;
+        Debug.Log($"{_parentEnemy.gameObject.name} took {amount} damage. Remaining health: {_health}");
 
-        if (health <= 0f)
+        if (_health <= 0)
         {
-            Die();
+            if (_parentEnemy != null)
+            {
+                _parentEnemy.Die();
+            }
+            else
+            {
+                Debug.LogWarning("ParentEnemy reference is missing on " + gameObject.name);
+                Destroy(gameObject, 2f);
+            }
         }
-    }
-
-    private void Die()
-    {
-        Debug.Log(gameObject.name + " has been destroyed!");
-        Destroy(gameObject, 2f);
     }
 }

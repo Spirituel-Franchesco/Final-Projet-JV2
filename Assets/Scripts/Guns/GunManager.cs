@@ -3,31 +3,26 @@ using TMPro;
 
 public class GunManager : MonoBehaviour
 {
-    public static GunManager instance;
+    public static GunManager _Instance;
 
-    public Gun[] allGuns;
-    private Gun currentGun;
+    public TextMeshProUGUI _ammoText;
+    public TextMeshProUGUI _gunNameText; // ← Optionnel pour afficher le nom du gun
+    public Gun[] _allGuns;
+    public int _money = 100;
 
-    public int money = 100;
-    public TextMeshProUGUI ammoText;
-    public TextMeshProUGUI gunNameText; // ← Optionnel pour afficher le nom du gun
-
-    private bool[] gunsOwned;
+    private bool[] _gunsOwned;
+    private Gun _currentGun;
 
     private void Awake()
     {
-        if (instance == null) instance = this;
+        if (_Instance == null) _Instance = this;
     }
 
     private void Start()
     {
-        //gunsOwned = new bool[allGuns.Length];
-        //gunsOwned[0] = true; // Le premier fusil est toujours possédé
-        //EquipGun(0);
-
-        gunsOwned = new bool[allGuns.Length];
-        for (int i = 0; i < gunsOwned.Length; i++)
-            gunsOwned[i] = true;  // ← toutes les armes sont considérées achetées
+        _gunsOwned = new bool[_allGuns.Length];
+        for (int i = 0; i < _gunsOwned.Length; i++)
+            _gunsOwned[i] = true;  // ← toutes les armes sont considérées achetées
 
         EquipGun(0);
     }
@@ -36,7 +31,7 @@ public class GunManager : MonoBehaviour
     {
         if (Input.GetButtonDown("Fire1") && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
         {
-            currentGun?.Shoot();
+            _currentGun?.Shoot();
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -47,19 +42,19 @@ public class GunManager : MonoBehaviour
         // Changement d'arme : touches 1, 2, 3
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (gunsOwned[0]) EquipGun(0);
+            if (_gunsOwned[0]) EquipGun(0);
             else Debug.Log("Arme 1 non achetée");
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (gunsOwned.Length > 1 && gunsOwned[1]) EquipGun(1);
+            if (_gunsOwned.Length > 1 && _gunsOwned[1]) EquipGun(1);
             else Debug.Log("Arme 2 non achetée");
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            if (gunsOwned.Length > 2 && gunsOwned[2]) EquipGun(2);
+            if (_gunsOwned.Length > 2 && _gunsOwned[2]) EquipGun(2);
             else Debug.Log("Arme 3 non achetée");
         }
 
@@ -69,92 +64,37 @@ public class GunManager : MonoBehaviour
 
     public void EquipGun(int index)
     {
-        for (int i = 0; i < allGuns.Length; i++)
-            allGuns[i].gameObject.SetActive(i == index);
+        for (int i = 0; i < _allGuns.Length; i++)
+            _allGuns[i].gameObject.SetActive(i == index);
 
-        currentGun = allGuns[index];
+        _currentGun = _allGuns[index];
         UpdateAmmoUI();
         UpdateGunNameUI();
     }
 
-    //public void BuyGun(int index)
-    //{
-    //    Gun gunToBuy = allGuns[index];
-    //    if (gunsOwned[index])
-    //    {
-    //        EquipGun(index);
-    //        Debug.Log("Arme déjà achetée, juste équipée.");
-    //    }
-    //    else if (money >= gunToBuy.price)
-    //    {
-    //        money -= gunToBuy.price;
-    //        gunsOwned[index] = true;
-    //        EquipGun(index);
-    //        Debug.Log($"Arme {index + 1} achetée et équipée.");
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("Pas assez d'argent pour acheter cette arme.");
-    //    }
-    //}
-
     public void BuyGun(int index)
     {
-        Gun gunToBuy = allGuns[index];
+        Gun gunToBuy = _allGuns[index];
 
         // TEMPORAIRE : on force l'arme comme "achetée" sans retirer de l'argent
-        gunsOwned[index] = true;
+        _gunsOwned[index] = true;
         EquipGun(index);
         Debug.Log($"[TEST] Arme {index + 1} débloquée et équipée.");
-
-        // Si tu veux revenir au système normal, remets ce bloc à la place :
-        /*
-        if (gunsOwned[index])
-        {
-            EquipGun(index);
-            Debug.Log("Arme déjà achetée, juste équipée.");
-        }
-        else if (money >= gunToBuy.price)
-        {
-            money -= gunToBuy.price;
-            gunsOwned[index] = true;
-            EquipGun(index);
-            Debug.Log($"Arme {index + 1} achetée et équipée.");
-        }
-        else
-        {
-            Debug.Log("Pas assez d'argent pour acheter cette arme.");
-        }
-        */
     }
-
-
-    //public void TryReload()
-    //{
-    //    if (money >= 10)
-    //    {
-    //        money -= 10;
-    //        currentGun?.Reload();
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("Pas assez d'argent pour recharger");
-    //    }
-    //}
 
     private void UpdateAmmoUI()
     {
-        if (currentGun != null && ammoText != null)
+        if (_currentGun != null && _ammoText != null)
         {
-            ammoText.text = $"Ammo: {currentGun.currentAmmo} / {currentGun.maxAmmo}";
+            _ammoText.text = $"Ammo: {_currentGun._currentAmmo} / {_currentGun._maxAmmo}";
         }
     }
 
     private void UpdateGunNameUI()
     {
-        if (currentGun != null && gunNameText != null)
+        if (_currentGun != null && _gunNameText != null)
         {
-            gunNameText.text = currentGun.gameObject.name;
+            _gunNameText.text = _currentGun.gameObject.name;
         }
     }
 }

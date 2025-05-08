@@ -3,42 +3,38 @@ using System.Collections;
 
 public abstract class Gun : MonoBehaviour
 {
-    public int currentAmmo = -1;
-    public int maxAmmo = 10;
-    public float reloadTime = 1f; // Time taken to reload
-    public int price = 0;
+    [SerializeField] protected Animator _gunAnimator;
 
-    protected bool canShoot = true;
-    protected bool isReloading = false; // Flag to check if reloading is in progress
+    public float _reloadTime = 1f; // Time taken to reload
+    public int _currentAmmo = -1;
+    public int _maxAmmo = 10;
+    public int _price = 0;
 
-
-    [SerializeField] protected Animator gunAnimator;
+    protected bool _canShoot = true;
+    protected bool _isReloading = false; // Flag to check if reloading is in progress
 
     public void Start()
     {
-        if (currentAmmo == -1)
+        if (_currentAmmo == -1)
         {
-            currentAmmo = maxAmmo; // Initialize current ammo
+            _currentAmmo = _maxAmmo; // Initialize current ammo
         }
-        //else
-        //{
-        //    currentAmmo = maxAmmo; // Initialize current ammo
-        //}
-        //currentAmmo = maxAmmo; // Initialize current ammo
     }
 
     public void OnEnable()
     {
-        isReloading = false; // Reset reloading flag when the gun is enabled
-        gunAnimator.SetBool("Reloading", false); // Reset reload animation
+        _isReloading = false; // Reset reloading flag when the gun is enabled
+        _gunAnimator.SetBool("Reloading", false); // Reset reload animation
     }
 
     public void Update()
     {
-        if (isReloading) return; // Skip update if reloading
+        if (_isReloading) return; // Skip update if reloading
 
-        if (currentAmmo <= 0)
+        if (_currentAmmo <= 0)
         {
+            //je voudrais que le joueur ne puisse plus pouvoir tirer
+            _canShoot = false; // Disable shooting if ammo is empty
             //Reload();
             StartCoroutine(Reload());
             return; // Reload if ammo is empty
@@ -51,34 +47,22 @@ public abstract class Gun : MonoBehaviour
 
     public abstract void Shoot();
 
-    //public abstract void Reload();
-    //{
-    //    Debug.Log("Reloading...");
-    //    currentAmmo = maxAmmo;
-    //}
-
-    //protected void PlayShootAnimation()
-    //{
-    //    if (gunAnimator != null)
-    //        gunAnimator.SetTrigger("Shoot");
-    //}
-
     IEnumerator Reload()
     {
-        isReloading = true; // Set reloading flag
+        _isReloading = true; // Set reloading flag
         Debug.Log("Reloading...");
-        
-        gunAnimator.SetBool("Reloading", true); // Trigger reload animation
 
-        canShoot = false; // Disable shooting during reload
-        yield return new WaitForSeconds(reloadTime - .25f); // Wait for the reload time
+        _gunAnimator.SetBool("Reloading", true); // Trigger reload animation
 
-        gunAnimator.SetBool("Reloading", false); // Reset reload animation
+        _canShoot = false; // Disable shooting during reload
+        yield return new WaitForSeconds(_reloadTime - .25f); // Wait for the reload time
+
+        _gunAnimator.SetBool("Reloading", false); // Reset reload animation
 
         yield return new WaitForSeconds(.25f); // Wait for the reload animation to finish
 
-        currentAmmo = maxAmmo; // Refill ammo
-        isReloading = false; // Reset reloading flag
-        canShoot = true; // Re-enable shooting after reload time
+        _currentAmmo = _maxAmmo; // Refill ammo
+        _isReloading = false; // Reset reloading flag
+        _canShoot = true; // Re-enable shooting after reload time
     }
 }

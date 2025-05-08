@@ -1,56 +1,57 @@
 using UnityEngine;
+using System.Collections;
 
 public class ZigzagEnemy : ParentEnemy
 {
-    [SerializeField] private float zigzagFrequency = 3f;   // Fréquence modérée pour un zigzag lisible
-    [SerializeField] private float zigzagAmplitude = 2.5f; // Amplitude raisonnable pour ne pas sortir trop du chemin
-    [SerializeField] private float _movementSpeed = 6f;    // Vitesse fluide sans rendre l'esquive impossible
+    [SerializeField] private GameObject _meleeEnemyPrefab; // prefab à instancier à la mort
 
     protected override void Move()
     {
-        Vector3 targetPos;
+        if (_agent == null) return;
 
-        if (EnemyManager.Instance.ShouldAttackPlayer(this))
+        if (EnemyManager._Instance.ShouldAttackPlayer(this))
         {
-            targetPos = hero.position;
+            _agent.isStopped = false;
+            _agent.SetDestination(_hero.position);
         }
         else
         {
-            targetPos = EnemyManager.Instance.GetExit().position;
+            _agent.isStopped = false;
+            _agent.SetDestination(EnemyManager._Instance.GetExit().position);
         }
 
-        // Direction vers la cible
-        Vector3 forward = (targetPos - transform.position).normalized;
-
-        // Oscillation latérale sur l'axe perpendiculaire (droite/gauche)
-        Vector3 right = Vector3.Cross(Vector3.up, forward);
-        float oscillation = Mathf.Sin(Time.time * zigzagFrequency) * zigzagAmplitude;
-
-        // Position avec décalage zigzag
-        Vector3 zigzagTarget = transform.position + forward * _movementSpeed * Time.deltaTime + right * oscillation * Time.deltaTime;
-
-        // On avance directement vers ce point
-        transform.position = zigzagTarget;
-
-        // Orientation vers la cible pour l’animation
-        transform.forward = forward;
-
-        animationLinker.Walk();
+        _animationLinker.WalkAnimation();
     }
 
-    protected override System.Collections.IEnumerator Attack()
+    protected override IEnumerator Attack()
     {
-        isAttacking = true;
-        animationLinker.Attack();
+        _agent.isStopped = true;
 
-        yield return new WaitForSeconds(0.5f);
+        Debug.Log("Clone enemy attacking");
 
-        if (Vector3.Distance(transform.position, hero.position) <= attackRange)
+        yield return null;
+
+        if (Vector3.Distance(transform.position, _hero.position) <= _attackRange)
         {
-            //HeroHealth._Instance.TakeDamage(damage);
+            //AimPoint._aimpoint.TakeDamage(_damage);
+            HeroHealth._Instance.TakeDamage(_damage);
         }
 
-        lastAttackTime = Time.time;
-        isAttacking = false;
+        _agent.isStopped = false;
+        _lastAttackTime = Time.time;
+    }
+
+    public override void Die()
+    {
+        Debug.Log("Clone enemy died, spawning 3 MeleeEnemies!");
+
+        for (int i = 0; i < 3; i++)
+        {
+            Vector3 spawnPosition = transform.position + Random.insideUnitSphere * 2f;
+            spawnPosition.y = transform.position.y; // garder la même hauteur
+            Instantiate(_meleeEnemyPrefab, spawnPosition, Quaternion.identity);
+        }
+
+        base.Die(); // joue animation et détruit l’objet
     }
 }

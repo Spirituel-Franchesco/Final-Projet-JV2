@@ -3,33 +3,33 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    public static EnemyManager Instance;
+    public static EnemyManager _Instance;
 
-    [SerializeField] private Transform hero;
-    [SerializeField] private Transform exitZone;
-    [SerializeField] private float detectionDistance = 50f;
+    [SerializeField] private Transform _hero;
+    [SerializeField] private Transform _exitZone;
+    [SerializeField] private float _detectionRange = 35f;
 
-    private List<ParentEnemy> allEnemies = new List<ParentEnemy>();
-    private List<ParentEnemy> attackers = new List<ParentEnemy>();
-    private const int maxAttackers = 3;
+    private List<ParentEnemy> _allEnemies = new List<ParentEnemy>();
+    private List<ParentEnemy> _attackers = new List<ParentEnemy>();
+    private const int _maxAttackers = 3;
 
     private void Awake()
     {
-        Instance = this;
+        _Instance = this;
     }
 
     public void RegisterEnemy(ParentEnemy enemy)
     {
-        if (!allEnemies.Contains(enemy))
+        if (!_allEnemies.Contains(enemy))
         {
-            allEnemies.Add(enemy);
+            _allEnemies.Add(enemy);
         }
     }
 
     public void UnregisterEnemy(ParentEnemy enemy)
     {
-        allEnemies.Remove(enemy);
-        attackers.Remove(enemy);
+        _allEnemies.Remove(enemy);
+        _attackers.Remove(enemy);
     }
 
     private void Update()
@@ -39,18 +39,18 @@ public class EnemyManager : MonoBehaviour
 
     private void UpdateAttackers()
     {
-        attackers.Clear();
+        _attackers.Clear();
 
         List<ParentEnemy> potentialAttackers = new List<ParentEnemy>();
 
-        foreach (var enemy in allEnemies)
+        foreach (var enemy in _allEnemies)
         {
             if (enemy == null) continue;
 
-            float distToHero = Vector3.Distance(enemy.transform.position, hero.position);
-            float distToExit = Vector3.Distance(enemy.transform.position, exitZone.position);
+            float distToHero = Vector3.Distance(enemy.transform.position, _hero.position);
+            float distToExit = Vector3.Distance(enemy.transform.position, _exitZone.position);
 
-            if (distToHero < distToExit && distToHero <= detectionDistance)
+            if (distToHero < distToExit && distToHero <= _detectionRange)
             {
                 potentialAttackers.Add(enemy);
             }
@@ -58,22 +58,22 @@ public class EnemyManager : MonoBehaviour
 
         potentialAttackers.Sort((a, b) =>
         {
-            float distA = Vector3.Distance(a.transform.position, hero.position);
-            float distB = Vector3.Distance(b.transform.position, hero.position);
+            float distA = Vector3.Distance(a.transform.position, _hero.position);
+            float distB = Vector3.Distance(b.transform.position, _hero.position);
             return distA.CompareTo(distB);
         });
 
-        for (int i = 0; i < Mathf.Min(maxAttackers, potentialAttackers.Count); i++)
+        for (int i = 0; i < Mathf.Min(_maxAttackers, potentialAttackers.Count); i++)
         {
-            attackers.Add(potentialAttackers[i]);
+            _attackers.Add(potentialAttackers[i]);
         }
     }
 
     public bool ShouldAttackPlayer(ParentEnemy enemy)
     {
-        return attackers.Contains(enemy);
+        return _attackers.Contains(enemy);
     }
 
-    public Transform GetHero() => hero;
-    public Transform GetExit() => exitZone;
+    public Transform GetHero() => _hero;
+    public Transform GetExit() => _exitZone;
 }

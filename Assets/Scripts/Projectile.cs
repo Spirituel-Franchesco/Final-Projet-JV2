@@ -2,36 +2,36 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public float damage = 10f;
-    public float lifeTime = 2f;
-    private Vector3 lastPosition;
+    public int _damage = 10;
+    public float _lifeTime = 2f;
+    private Vector3 _lastPosition;
 
     void Start()
     {
-        lastPosition = transform.position;
-        Destroy(gameObject, lifeTime);
+        _lastPosition = transform.position;
+        Destroy(gameObject, _lifeTime);
     }
 
     void Update()
     {
         CheckCollision();
-        lastPosition = transform.position;
+        _lastPosition = transform.position;
     }
 
     private void CheckCollision()
     {
-        Vector3 direction = transform.position - lastPosition;
+        Vector3 direction = transform.position - _lastPosition;
         float distance = direction.magnitude;
 
         if (distance > 0)
         {
             RaycastHit hit;
-            if (Physics.Raycast(lastPosition, direction.normalized, out hit, distance))
+            if (Physics.Raycast(_lastPosition, direction.normalized, out hit, distance))
             {
                 AimPoint target = hit.transform.GetComponent<AimPoint>();
                 if (target != null)
                 {
-                    target.TakeDamage(damage);
+                    target.TakeDamage(_damage);
                     Debug.Log("Raycast hit: " + hit.transform.name);
                 }
 
@@ -46,7 +46,7 @@ public class Projectile : MonoBehaviour
         AimPoint target = collision.transform.GetComponent<AimPoint>();
         if (target != null)
         {
-            target.TakeDamage(damage);
+            target.TakeDamage(_damage);
             Debug.Log("Collision hit: " + collision.transform.name);
         }
 

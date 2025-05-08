@@ -2,15 +2,19 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-
     public static PlayerMovement _Instance;
 
-    public float _moveSpeed = 5f; // Vitesse de déplacement
-    public float _mouseSensitivity = 100f; // Sensibilité de la souris
 
     private CharacterController _controller;
     private Transform _playerCamera;
+
+    public float _moveSpeed = 5f; // Vitesse de déplacement
+    public float _mouseSensitivity = 70f; // Sensibilité de la souris
+
     private float _xRotation = 0f;
+
+    private Vector3 _initialPosition;
+    private Quaternion _initialRotation;
 
     void Start()
     {
@@ -25,8 +29,11 @@ public class PlayerMovement : MonoBehaviour
         _playerCamera.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
         transform.rotation = Quaternion.Euler(0f, 0f, 0f); // Réinitialise la rotation du joueur
 
-        //ResourceManager.Instance.AddResources(reward);
-        //ResourceManager.Instance.AddResources(reward);
+        //ResourceManager._Instance.AddResources(reward);
+        //ResourceManager._Instance.AddResources(reward);
+
+        _initialPosition = transform.position;
+        _initialRotation = transform.rotation;
 
     }
 
@@ -47,5 +54,13 @@ public class PlayerMovement : MonoBehaviour
 
         _playerCamera.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
+    }
+
+    public void ResetPlayer()
+    {
+        transform.position = _initialPosition;
+        transform.rotation = _initialRotation;
+        // Remettre la vie au max :
+        HeroHealth._Instance.ResetHealth();
     }
 }

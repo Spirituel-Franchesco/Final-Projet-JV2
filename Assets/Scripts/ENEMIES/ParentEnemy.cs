@@ -4,79 +4,95 @@ using UnityEngine.AI;
 public abstract class ParentEnemy : MonoBehaviour
 {
     [Header("Base Settings")]
-    [SerializeField] protected float attackCooldown = 2f;
-    [SerializeField] protected int damage = 10;
-    [SerializeField] protected int maxHealth = 100;
-    [SerializeField] protected float attackRange = 1.5f;
+    [SerializeField] protected float _attackCooldown = 2f;
+    [SerializeField] protected float _attackRange = 1.5f;
+    [SerializeField] protected int _damage = 10;
+    [SerializeField] protected int _maxHealth = 100;
 
     [Header("References")]
-    [SerializeField] protected Transform hero;
-    [SerializeField] protected NavMeshAgent agent;
-    protected AnimationLinker animationLinker;
+    [SerializeField] protected Transform _hero;
+    [SerializeField] protected NavMeshAgent _agent;
+    protected AnimationLinker _animationLinker;
 
-    protected float lastAttackTime;
-    protected int currentHealth;
-    protected bool isAttacking;
+    protected float _lastAttackTime;
+    protected int _currentHealth;
+    public bool _IsAttacking;
+
+    private Vector3 _initialPosition;
+    private Quaternion _initialRotation;
 
     protected virtual void Start()
     {
-        animationLinker = GetComponentInChildren<AnimationLinker>();
-        currentHealth = maxHealth;
-        //hero = PlayerMovement._Instance.transform;
+        _animationLinker = GetComponentInChildren<AnimationLinker>();
+        _currentHealth = _maxHealth;
+        //_hero = PlayerMovement._Instance.transform;
 
-        EnemyManager.Instance.RegisterEnemy(this);
-        hero = EnemyManager.Instance.GetHero(); // Centralisé
+        EnemyManager._Instance.RegisterEnemy(this);
+        _hero = EnemyManager._Instance.GetHero(); // Centralisé
+
+        _initialPosition = transform.position;
+        _initialRotation = transform.rotation;
+        EnemyManager._Instance.RegisterEnemy(this);
+        _hero = EnemyManager._Instance.GetHero();
     }
 
     protected virtual void Update()
     {
-        if (hero == null || currentHealth <= 0) return;
+        if (_hero == null || _currentHealth <= 0) return;
+        Debug.Log("Attacking Parent 1");
 
-        float distanceToHero = Vector3.Distance(transform.position, hero.position);
-        if (distanceToHero > attackRange)
+        float distanceToHero = Vector3.Distance(transform.position, _hero.position);
+        if (distanceToHero > _attackRange)
         {
             Move();
+            //Debug.Log($"distanceToHero : {distanceToHero} _attackRange{_attackRange}");
         }
         else
         {
-            animationLinker.Stop();
-            if (!isAttacking && Time.time > lastAttackTime + attackCooldown)
+            _animationLinker.StopAnimation();
+            if (!_IsAttacking && Time.time > _lastAttackTime + _attackCooldown)
             {
-                StartCoroutine(Attack());
+                _animationLinker.AttackAnimation();
+
+                _IsAttacking = true;
+
+                //StartCoroutine(Attack());
+                Debug.Log("Attacking Parent 2");
             }
         }
     }
 
+    public virtual void LaunchAttack()
+    {
+        StartCoroutine(Attack());
+    }
+
     public virtual void TakeDamage(int amount)
     {
-        currentHealth -= amount;
-        if (currentHealth <= 0)
+        _currentHealth -= amount;
+        if (_currentHealth <= 0)
             Die();
     }
 
-    protected virtual void Die()
+    public virtual void Die()
     {
-        animationLinker.Death();
-        EnemyManager.Instance.UnregisterEnemy(this);
+        _animationLinker.DeathAnimation();
+        EnemyManager._Instance.UnregisterEnemy(this);
         Destroy(gameObject, 2f);
     }
 
     protected abstract void Move();
     protected abstract System.Collections.IEnumerator Attack();
 
-    //public void Die()
-    //{
-    //    if (isDead) return;
-
-    //    isDead = true;
-    //    // Désactiver l'IA / animation
-    //    agent.enabled = false;
-    //    GetComponent<Collider>().enabled = false;
-
-    //    // Notifier le manager
-    //    WaveManager.Instance.OnEnemyDeath();
-
-    //    Destroy(gameObject, 2f); // délai avant suppression si besoin
-    //}
+    public virtual void ResetEnemy()
+    {
+        transform.position = _initialPosition;
+        transform.rotation = _initialRotation;
+        _currentHealth = _maxHealth;
+        _agent.enabled = true;
+        _agent.isStopped = false;
+        _animationLinker.ResetAttack();
+        _animationLinker.StopAnimation();
+    }
 
 }

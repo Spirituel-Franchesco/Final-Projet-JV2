@@ -3,70 +3,41 @@ using UnityEngine;
 
 public class PlayerGunSystem : MonoBehaviour
 {
-    //public int money = 200;
+    public GameObject _pistolPrefab;
+    public GameObject _riflePrefab;
+    public GameObject _shotgunPrefab;
+    public Transform _shootOrigin;
 
-    //private Dictionary<string, bool> ownedGuns = new Dictionary<string, bool>();
-    //private string currentGun = "Pistol"; // par défaut
+    public int _money = 200;
 
-    //public bool HasGun(string gunName) => ownedGuns.ContainsKey(gunName) && ownedGuns[gunName];
-
-    //public void BuyGun(string gunName, int price)
-    //{
-    //    money -= price;
-    //    ownedGuns[gunName] = true;
-    //    currentGun = gunName;
-    //    Debug.Log("Acheté : " + gunName);
-    //}
-
-    //public void SwitchGun(string gunName)
-    //{
-    //    currentGun = gunName;
-    //    Debug.Log("Changement pour : " + gunName);
-    //}
-
-    //public void ReloadGun(int price)
-    //{
-    //    money -= price;
-    //    Debug.Log("Reload de " + currentGun);
-    //    // Ajoute la logique de recharge plus tard
-    //}
-
-
-    public Transform shootOrigin;
-    public int money = 200;
-
-    private Dictionary<string, Gun> ownedGuns = new();
-    private Gun currentGun;
-
-    public GameObject pistolPrefab;
-    public GameObject riflePrefab;
-    public GameObject shotgunPrefab;
+    private Dictionary<string, Gun> _ownedGuns = new();
+    private Gun _currentGun;
 
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            //if (currentGun != null)
-               // currentGun.Shoot(shootOrigin);
+            if (_currentGun != null) ;
+               //_currentGun.Shoot(_shootOrigin);
         }
     }
 
     public bool HasGun(string gunName)
     {
-        return ownedGuns.ContainsKey(gunName);
+        return _ownedGuns.ContainsKey(gunName);
     }
 
     public void BuyGun(string gunName, int price)
     {
-        if (money < price) return;
+        if (_money < price) return;
 
-        money -= price;
+        _money -= price;
         GameObject prefab = GetGunPrefab(gunName);
         if (prefab == null) return;
 
         GameObject gunObj = Instantiate(prefab, transform);
         Gun gun = gunObj.GetComponent<Gun>();
-        ownedGuns[gunName] = gun;
+        _ownedGuns[gunName] = gun;
 
         EquipGun(gunName);
         Debug.Log("Acheté : " + gunName);
@@ -81,28 +52,28 @@ public class PlayerGunSystem : MonoBehaviour
 
     public void ReloadGun(int price)
     {
-        if (money < price || currentGun == null) return;
+        if (_money < price || _currentGun == null) return;
 
-        money -= price;
-        //currentGun.Reload();
-        Debug.Log("Reload de " + currentGun);
+        _money -= price;
+        //_currentGun.Reload();
+        Debug.Log("Reload de " + _currentGun);
     }
 
     private void EquipGun(string gunName)
     {
-        if (currentGun != null)
-            Destroy(currentGun.gameObject);
+        if (_currentGun != null)
+            Destroy(_currentGun.gameObject);
 
-        currentGun = Instantiate(GetGunPrefab(gunName), transform).GetComponent<Gun>();
+        _currentGun = Instantiate(GetGunPrefab(gunName), transform).GetComponent<Gun>();
     }
 
     private GameObject GetGunPrefab(string gunName)
     {
         return gunName switch
         {
-            "Pistol" => pistolPrefab,
-            "Rifle" => riflePrefab,
-            "Shotgun" => shotgunPrefab,
+            "Pistol" => _pistolPrefab,
+            "Rifle" => _riflePrefab,
+            "Shotgun" => _shotgunPrefab,
             _ => null
         };
     }

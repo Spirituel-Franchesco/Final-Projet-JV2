@@ -36,7 +36,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            _animationLinker.Stop();
+            _animationLinker.StopAnimation();
             if (!_isAttacking && Time.time > _lastAttackTime + _attackCooldown)
             {
                 StartCoroutine(AttackHero());
@@ -47,17 +47,13 @@ public class Enemy : MonoBehaviour
     private void FollowHero()
     {
         _navMeshAgent.SetDestination(_hero.position);
-
-        //Vector3 direction = (_hero.position - transform.position).normalized;
-        //transform.LookAt(_hero.position);
-        //transform.position += direction * _movementSpeed * Time.deltaTime;
-        _animationLinker.Walk();
+        _animationLinker.WalkAnimation();
     }
 
     private System.Collections.IEnumerator AttackHero()
     {
         _isAttacking = true;
-        _animationLinker.Attack();
+        _animationLinker.AttackAnimation();
 
         yield return new WaitForSeconds(0.5f); // Laisser l'animation d'attaque jouer
 
@@ -71,7 +67,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        _animationLinker.Death();
+        _animationLinker.DeathAnimation();
         Destroy(gameObject, 2f); // Détruire l'ennemi après 2 secondes
     }
 }

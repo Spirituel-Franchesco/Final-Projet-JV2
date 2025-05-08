@@ -4,16 +4,18 @@ using UnityEngine;
 public class HeroHealth : MonoBehaviour
 {
     public delegate void PlayerDeathHandler();
-    public event PlayerDeathHandler OnPlayerDeath; // Événement déclenché quand le joueur meurt
+    public event PlayerDeathHandler _OnPlayerDeath; // Événement déclenché quand le joueur meurt  
     public static HeroHealth _Instance;
 
-    //[SerializeField] private Animator _animator;
+    //[SerializeField] private Animator _animator;  
     [SerializeField] private HealthBar _healthBar;
-    [SerializeField] private float _invincibilityDuration = 10f; // Durée d'invincibilité en secondes
-    [SerializeField] private float _invincibilityCooldown = 5f; // Temps de recharge en secondes
+    [SerializeField] private float _invincibilityDuration = 10f; // Durée d'invincibilité en secondes  
+    [SerializeField] private float _invincibilityCooldown = 5f; // Temps de recharge en secondes  
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] private int _currentHealth;
-    private AnimationLinker _animationLinker;
+
+    private Vector3 _initialPosition;
+    private Quaternion _initialRotation;
 
     private bool _isInvincible = false;
     private bool _isCooldownActive = false;
@@ -33,26 +35,20 @@ public class HeroHealth : MonoBehaviour
     {
         _currentHealth = _maxHealth;
         _healthBar.SetMaxHealth(_maxHealth);
-        //if (_shieldEffect != null)
-        //    _shieldEffect.SetActive(false); // Désactive l'effet visuel au début
+        _initialPosition = transform.position;
+        _initialRotation = transform.rotation;
     }
 
     void Update()
     {
-        // Test de dégâts
+        // Test de dégâts  
         if (Input.GetKeyDown(KeyCode.H))
         {
             TakeDamage(10);
             Debug.Log($"HeroHealth : {_currentHealth}");
         }
 
-        // Activation de l'invincibilité
-        //if (Input.GetKeyDown(KeyCode.Space) && !_isInvincible && !_isCooldownActive)
-        //{
-        //    StartCoroutine(ActivateInvincibility());
-        //}
-
-        // Gestion du cooldown
+        // Gestion du cooldown  
         if (_isCooldownActive)
         {
             _cooldownTimer += Time.deltaTime;
@@ -66,11 +62,6 @@ public class HeroHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        //if (_isInvincible)
-        //{
-        //    Debug.Log("Le joueur est invincible, aucun dégât reçu !");
-        //    return; // Ignore les dégâts si invincible
-        //}
 
         _currentHealth -= damage;
         _healthBar.SetHealth(_currentHealth);
@@ -79,20 +70,20 @@ public class HeroHealth : MonoBehaviour
         if (_currentHealth <= 0)
         {
             _currentHealth = 0;
-            //_animationLinker.Death();
-            //_animator.SetBool("IsDeath", true);
-            OnPlayerDeath?.Invoke(); // Déclenche l'événement de mort du joueur
-            //PlayerMovement._Instance.enabled = false;
-            //Debug.Log("Le joueur est mort !");
+            //_animationLinker.Death();  
+            //_animator.SetBool("IsDeath", true);  
+            _OnPlayerDeath?.Invoke(); // ça déclenchera ShowGameOver() 
+            GetComponent<PlayerMovement>().enabled = false; // Désactiver le mouvement du joueur
+            Debug.Log("Le joueur est mort !");  
         }
     }
 
     public void ResetHealth()
     {
-        PlayerMovement._Instance.enabled = true;
+        GetComponent<PlayerMovement>().enabled = true; // Réactiver le mouvement du joueur
         _currentHealth = _maxHealth;
         _healthBar.SetHealth(_currentHealth);
-        //_animator.SetBool("IsDeath", false); // Réinitialise l'animation de mort
+        //_animator.SetBool("IsDeath", false); // Réinitialise l'animation de mort  
     }
 
     public bool IsAlive()
@@ -100,24 +91,17 @@ public class HeroHealth : MonoBehaviour
         return _currentHealth > 0;
     }
 
-    //private IEnumerator ActivateInvincibility()
-    //{
-    //    _isInvincible = true;
-    //    _isCooldownActive = true;
+    public void ResetPlayer()
+    {
+        transform.position = _initialPosition;
+        transform.rotation = _initialRotation;
+        // Remettre la vie au max :  
+        HeroHealth._Instance.ResetHealthToMax();
+    }
 
-    //    // Active l'effet visuel du bouclier
-    //    if (_shieldEffect != null)
-    //        _shieldEffect.SetActive(true);
-
-    //    Debug.Log("Invincibilité activée !");
-    //    yield return new WaitForSeconds(_invincibilityDuration);
-
-    //    _isInvincible = false;
-
-    //    // Désactive l'effet visuel du bouclier
-    //    if (_shieldEffect != null)
-    //        _shieldEffect.SetActive(false);
-
-    //    Debug.Log("Invincibilité désactivée !");
-    //}
+    // Renommé pour éviter le conflit avec la méthode existante  
+    public void ResetHealthToMax()
+    {
+        _currentHealth = _maxHealth;
+    }
 }

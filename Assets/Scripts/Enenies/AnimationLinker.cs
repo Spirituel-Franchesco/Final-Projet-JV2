@@ -11,27 +11,33 @@ public class AnimationLinker : MonoBehaviour
 
     public void ResetAttack()
     {
+        GetComponentInParent<ParentEnemy>()._IsAttacking = false;
         _animator.SetBool("IsAttacking", false);
     }
 
-    public void Death()
+    public void DeathAnimation()
     {
         _animator.SetBool("IsDeath", true);
     }
 
-    public void Attack()
+    public void AttackAnimation()
     {
         _animator.SetBool("IsAttacking", true);
     }
 
-    public void Walk()
+    public void WalkAnimation()
     {
         _animator.SetBool("IsWalking", true);
     }
 
-    public void Stop()
+    public void StopAnimation()
     {
         _animator.SetBool("IsWalking", false);
+    }
+
+    public void ControlAttack() 
+    {
+        GetComponentInParent<ParentEnemy>().LaunchAttack();
     }
 }
 
