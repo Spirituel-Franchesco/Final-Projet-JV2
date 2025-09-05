@@ -2,38 +2,23 @@ using UnityEngine;
 
 public class AimPoint : MonoBehaviour
 {
-    //[SerializeField] private GameObject _enemy;
-    //public Animator _animator;
-    //public int _health = 100;
-
-    //public void TakeDamage(int amount)
-    //{
-    //    //amount = 10; // Exemple de valeur de dégâts
-    //    _health -= amount;
-    //    Debug.Log(_enemy.name + " took " + amount + " damage. Remaining health: " + _health);
-
-    //    if (_health <= 0)
-    //    {
-    //        Die();
-    //    }
-    //}
-
-    //private void Die()
-    //{
-    //    Debug.Log(_enemy.name + " has been destroyed!");
-    //    Destroy(_enemy, 2f);
-    //}
-
-    [SerializeField] private int _health = 100; // Santé initiale
     [SerializeField] private ParentEnemy _parentEnemy;
+    [SerializeField] private int _health = 100; // Santé initiale
+
+    private bool _isDead = false; //  nouveau flag
 
     public void TakeDamage(int amount)
     {
+        if (_isDead) return;
+
         _health -= amount;
         Debug.Log($"{_parentEnemy.gameObject.name} took {amount} damage. Remaining health: {_health}");
 
         if (_health <= 0)
         {
+            _isDead = true; // active le flag de mort
+            Debug.Log($"{_parentEnemy.gameObject.name} is dead.");
+
             if (_parentEnemy != null)
             {
                 _parentEnemy.Die();

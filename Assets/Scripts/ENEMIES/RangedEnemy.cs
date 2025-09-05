@@ -6,7 +6,19 @@ public class RangedEnemy : ParentEnemy
     [Header("Ranged Settings")]
     [SerializeField] private GameObject _projectilePrefab;
     [SerializeField] private Transform _shootPoint;
+    [SerializeField] private ObjectPool _projectilePool;
     [SerializeField] private float _shootRange = 35f;
+
+    protected override void Start()
+    {
+        base.Start();
+
+        if (_projectilePool == null)
+        {
+            _projectilePool = ObjectPool._Instance;
+            //_projectilePrefab = GameObject.Find("ProjectilePool");
+        }
+    }
 
     protected override void Update()
     {
@@ -54,6 +66,9 @@ public class RangedEnemy : ParentEnemy
         _animationLinker.AttackAnimation();
         Debug.Log("Ranged attack triggered");
 
+        if (_attackClip != null)
+            _audioSource.PlayOneShot(_attackClip);
+
         yield return new WaitForSeconds(0.5f);
 
         if (Vector3.Distance(transform.position, _hero.position) <= _shootRange)
@@ -68,10 +83,14 @@ public class RangedEnemy : ParentEnemy
 
     private void LaunchProjectile()
     {
-        GameObject projectile = Instantiate(_projectilePrefab, _shootPoint.position, Quaternion.identity);
+        GameObject projectile = _projectilePool.Get();
+        projectile.transform.position = _shootPoint.position;
+        projectile.transform.rotation = Quaternion.identity;
+
         Vector3 direction = (_hero.position + Vector3.up * 1.5f - _shootPoint.position).normalized;
         projectile.transform.forward = direction;
         projectile.GetComponent<Rigidbody>().velocity = direction * 10f;
-        Destroy(projectile, 5f);
+
+        projectile.GetComponent<Projectile>().Initialize(_projectilePool);
     }
 }

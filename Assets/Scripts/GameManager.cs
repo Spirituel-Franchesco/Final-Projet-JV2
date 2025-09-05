@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private GameObject _victoryPanel;
+    [SerializeField] private AudioSource _victoryClip;
+    [SerializeField] private AudioClip _defeatClip;
 
     private bool _isGameOver = false;
 
@@ -39,6 +41,9 @@ public class GameManager : MonoBehaviour
 
     public void ShowGameOver()
     {
+        if (_defeatClip != null)
+            AudioSource.PlayClipAtPoint(_defeatClip, Camera.main.transform.position);
+
         if (_isGameOver) return;
 
         _isGameOver = true;
@@ -50,6 +55,9 @@ public class GameManager : MonoBehaviour
 
     public void ShowVictory()
     {
+        if (_victoryClip != null)
+            _victoryClip.Play();
+
         if (_isGameOver) return;
 
         _isGameOver = true;

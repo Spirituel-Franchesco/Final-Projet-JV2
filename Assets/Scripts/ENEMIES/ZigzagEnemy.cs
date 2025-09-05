@@ -29,11 +29,13 @@ public class ZigzagEnemy : ParentEnemy
 
         Debug.Log("Clone enemy attacking");
 
+        if (_attackClip != null)
+            _audioSource.PlayOneShot(_attackClip);
+
         yield return null;
 
         if (Vector3.Distance(transform.position, _hero.position) <= _attackRange)
         {
-            //AimPoint._aimpoint.TakeDamage(_damage);
             HeroHealth._Instance.TakeDamage(_damage);
         }
 

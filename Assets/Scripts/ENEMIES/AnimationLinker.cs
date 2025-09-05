@@ -2,11 +2,22 @@ using UnityEngine;
 
 public class AnimationLinker : MonoBehaviour
 {
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
 
     void Start()
     {
+        //_animator = GetComponent<Animator>();
+
         _animator = GetComponent<Animator>();
+        if (_animator == null)
+        {
+            _animator = GetComponentInParent<Animator>();
+        }
+
+        if (_animator == null)
+        {
+            Debug.LogError("Animator non trouvé sur " + gameObject.name);
+        }
     }
 
     public void ResetAttack()
@@ -23,11 +34,13 @@ public class AnimationLinker : MonoBehaviour
     public void AttackAnimation()
     {
         _animator.SetBool("IsAttacking", true);
+        _animator.SetBool("IsWalking", false);
     }
 
     public void WalkAnimation()
     {
         _animator.SetBool("IsWalking", true);
+        _animator.SetBool("IsAttacking", false);
     }
 
     public void StopAnimation()

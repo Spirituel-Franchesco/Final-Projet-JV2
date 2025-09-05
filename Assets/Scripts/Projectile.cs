@@ -2,14 +2,19 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    public int _damage = 10;
-    public float _lifeTime = 2f;
-    private Vector3 _lastPosition;
+    [SerializeField] private float _lifeTime = 2f;
+    [SerializeField] private int _damage = 10;
 
-    void Start()
+    private Vector3 _lastPosition;
+    private ObjectPool _pool;
+
+    public void Initialize(ObjectPool pool)
     {
+        _pool = pool;
         _lastPosition = transform.position;
-        Destroy(gameObject, _lifeTime);
+        Invoke(nameof(Deactivate), _lifeTime);
+
+        Debug.Log($"[POOL] Projectile activated from pool at {transform.position}");
     }
 
     void Update()
@@ -28,28 +33,44 @@ public class Projectile : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(_lastPosition, direction.normalized, out hit, distance))
             {
-                AimPoint target = hit.transform.GetComponent<AimPoint>();
+                HeroHealth target = hit.transform.GetComponent<HeroHealth>();
                 if (target != null)
                 {
                     target.TakeDamage(_damage);
                     Debug.Log("Raycast hit: " + hit.transform.name);
+                    Debug.Log("[POOL] Raycast hit hero: " + hit.transform.name);
                 }
 
-                Destroy(gameObject);
+                Deactivate();
             }
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Fallback, au cas où
         AimPoint target = collision.transform.GetComponent<AimPoint>();
         if (target != null)
         {
             target.TakeDamage(_damage);
             Debug.Log("Collision hit: " + collision.transform.name);
+            Debug.Log("[POOL] Collision hit aim point: " + collision.transform.name);
         }
 
-        Destroy(gameObject);
+        Deactivate();
+    }
+
+    private void Deactivate()
+    {
+        CancelInvoke();
+        if (_pool != null)
+        {
+            Debug.Log($"[POOL] Projectile returned to pool at {transform.position}");
+            _pool.ReturnToPool(gameObject);
+        }
+        else
+        {
+            Debug.LogWarning("[POOL] Projectile destroyed instead of returned to pool!");
+            Destroy(gameObject);
+        }
     }
 }

@@ -1,33 +1,38 @@
 ﻿using UnityEngine;
 using TMPro;
 using System;
+using Unity.VisualScripting;
 
 public class ResourceManager : MonoBehaviour
 {
-    public static ResourceManager _Instance;
-
-    private int _resources = 0;
-
-    [SerializeField] private TextMeshProUGUI _resourceText;
-
+    public static ResourceManager _InstanceResource;
 
     public event Action OnResourceChanged;
 
-    void Awake()
+    [SerializeField] private TextMeshProUGUI _resourceText;
+
+    private int _resources = 0;
+
+    private void Awake()
     {
-        if (_Instance != null)
+        if (_InstanceResource != null)
         {
-            Debug.LogError("Il y a déjà un ResourceManager dans la scène !");
+            Destroy(gameObject);
             return;
         }
+        _InstanceResource = this;
+    }
 
-        _Instance = this;
+    private void Start()
+    {
+        UpdateUI();
     }
 
 
     public void AddResource(int amount)
     {
         _resources += amount;
+        Debug.Log($"Ajouté {amount} ressources. Total : {_resources}");
         UpdateUI();
         OnResourceChanged?.Invoke();
     }
@@ -37,11 +42,12 @@ public class ResourceManager : MonoBehaviour
         if (_resources >= amount)
         {
             _resources -= amount;
+            Debug.Log($"Dépensé {amount} ressources. Reste : {_resources}");
             UpdateUI();
             OnResourceChanged?.Invoke();
             return true;
         }
-
+        Debug.LogWarning("Pas assez de ressources !");
         return false;
     }
 
@@ -52,7 +58,4 @@ public class ResourceManager : MonoBehaviour
         if (_resourceText != null)
             _resourceText.text = "Ressources : " + _resources;
     }
-
-
-
 }

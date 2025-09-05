@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 5890126981874568643}
   - component: {fileID: 5890126981874568641}
   - component: {fileID: 330547611707485304}
-  - component: {fileID: 8454898518550159293}
   - component: {fileID: 423660942}
   - component: {fileID: 423660943}
   - component: {fileID: 1003864885733978607}
   - component: {fileID: 529684381}
+  - component: {fileID: 8891238809173589739}
   m_Layer: 0
   m_Name: EnemyDistant
   m_TagString: Enemy
@@ -107,7 +107,83 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!82 &8454898518550159293
+--- !u!195 &423660942
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890126981874568642}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 2.5
+  m_Speed: 10
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 15
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 20
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &423660943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890126981874568642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6b88568ec13a0242b5d20aa4df07442, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _IsAttacking: 0
+  _deathClip: {fileID: 8300000, guid: af941996e28a33e4f9a1fd61f7bb2601, type: 3}
+  _attackClip: {fileID: 8300000, guid: 4a2ddadaed312b84eb1c0487f8790878, type: 3}
+  _audioSource: {fileID: 8891238809173589739}
+  _attackCooldown: 2
+  _attackRange: 1.5
+  _damage: 20
+  _maxHealth: 100
+  _rewardValue: 40
+  _hero: {fileID: 3560258104167003071, guid: 0eb15fd32ad25c4488056e2779aa1b5d, type: 3}
+  _agent: {fileID: 423660942}
+  _projectilePrefab: {fileID: 407946712905865781, guid: 5efa20404138f5b40bdeba3671f416ca, type: 3}
+  _shootPoint: {fileID: 8622124566744104496}
+  _projectilePool: {fileID: 8591491922019974424, guid: 31a458fdf51ec4b4ea823f94eff5f0cf, type: 3}
+  _shootRange: 35
+--- !u!65 &1003864885733978607
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890126981874568642}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &529684381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5890126981874568642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32c4e0dfc077be64987b6517c1781d05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _parentEnemy: {fileID: 423660943}
+  _health: 100
+--- !u!82 &8891238809173589739
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,7 +193,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 46e698701a931474a925374a0db5c48f, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -203,77 +279,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!195 &423660942
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5890126981874568642}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 2.5
-  m_Speed: 10
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 15
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 20
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
---- !u!114 &423660943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5890126981874568642}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6b88568ec13a0242b5d20aa4df07442, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _attackCooldown: 2
-  _attackRange: 1.5
-  _damage: 20
-  _maxHealth: 100
-  _hero: {fileID: 3560258104167003071, guid: 0eb15fd32ad25c4488056e2779aa1b5d, type: 3}
-  _agent: {fileID: 423660942}
-  _IsAttacking: 0
-  _projectilePrefab: {fileID: 407946712905865781, guid: 5efa20404138f5b40bdeba3671f416ca, type: 3}
-  _shootPoint: {fileID: 8622124566744104496}
-  _shootRange: 35
---- !u!65 &1003864885733978607
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5890126981874568642}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &529684381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5890126981874568642}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32c4e0dfc077be64987b6517c1781d05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _health: 100
-  _parentEnemy: {fileID: 423660943}
 --- !u!1 &5890126982073491661
 GameObject:
   m_ObjectHideFlags: 0
@@ -1814,6 +1819,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 738f136afc520e84b8d01cd0104796b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 8622124566734803350}
 --- !u!136 &242960929
 CapsuleCollider:
   m_ObjectHideFlags: 0

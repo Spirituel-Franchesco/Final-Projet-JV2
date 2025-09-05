@@ -25,6 +25,9 @@ public class MeleeEnemy : ParentEnemy
     {
         _agent.isStopped = true;
 
+        if (_attackClip != null)
+            _audioSource.PlayOneShot(_attackClip);
+
         Debug.Log("Melee enemy attacking");
 
         yield return null;

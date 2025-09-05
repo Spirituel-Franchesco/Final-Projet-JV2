@@ -3,20 +3,25 @@ using UnityEngine.AI;
 
 public abstract class ParentEnemy : MonoBehaviour
 {
+    public bool _IsAttacking;
+
     [Header("Base Settings")]
+    [SerializeField] protected AudioClip _deathClip;
+    [SerializeField] protected AudioClip _attackClip;
+    [SerializeField] protected AudioSource _audioSource;
     [SerializeField] protected float _attackCooldown = 2f;
     [SerializeField] protected float _attackRange = 1.5f;
     [SerializeField] protected int _damage = 10;
     [SerializeField] protected int _maxHealth = 100;
+    [SerializeField] private int _rewardValue = 40;
 
     [Header("References")]
     [SerializeField] protected Transform _hero;
     [SerializeField] protected NavMeshAgent _agent;
-    protected AnimationLinker _animationLinker;
 
+    protected AnimationLinker _animationLinker;
     protected float _lastAttackTime;
     protected int _currentHealth;
-    public bool _IsAttacking;
 
     private Vector3 _initialPosition;
     private Quaternion _initialRotation;
@@ -25,7 +30,7 @@ public abstract class ParentEnemy : MonoBehaviour
     {
         _animationLinker = GetComponentInChildren<AnimationLinker>();
         _currentHealth = _maxHealth;
-        //_hero = PlayerMovement._Instance.transform;
+        //_hero = PlayerMovement._InstanceResource.transform;
 
         EnemyManager._Instance.RegisterEnemy(this);
         _hero = EnemyManager._Instance.GetHero(); // Centralisé
@@ -76,9 +81,12 @@ public abstract class ParentEnemy : MonoBehaviour
 
     public virtual void Die()
     {
+        if (_deathClip != null)
+            AudioSource.PlayClipAtPoint(_deathClip, transform.position);
         _animationLinker.DeathAnimation();
         EnemyManager._Instance.UnregisterEnemy(this);
-        Destroy(gameObject, 2f);
+        Destroy(gameObject, 3f);
+        ResourceManager._InstanceResource?.AddResource(_rewardValue);
     }
 
     protected abstract void Move();
@@ -94,5 +102,4 @@ public abstract class ParentEnemy : MonoBehaviour
         _animationLinker.ResetAttack();
         _animationLinker.StopAnimation();
     }
-
 }

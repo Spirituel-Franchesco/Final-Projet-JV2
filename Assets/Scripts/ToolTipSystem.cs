@@ -24,11 +24,8 @@ public class ToolTipSystem : MonoBehaviour
         _tooltipPanel.transform.position = position;
     }
 
-
     public void Hide()
     {
         _tooltipPanel.SetActive(false);
-
-
     }
 }

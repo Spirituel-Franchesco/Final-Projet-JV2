@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class MouseManager : MonoBehaviour
 {
-    public bool _cursorVisible = false;
+    [SerializeField] private bool _cursorVisible = false;
 
     void Start()
     {

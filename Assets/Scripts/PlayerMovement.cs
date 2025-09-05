@@ -4,63 +4,70 @@ public class PlayerMovement : MonoBehaviour
 {
     public static PlayerMovement _Instance;
 
+    [SerializeField] private AudioSource _footstepAudio;
+    [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private float _mouseSensitivity = 100f;
+    [SerializeField] private float _smoothing = 5f;  // nouveau : interpolation (lerp)
 
     private CharacterController _controller;
     private Transform _playerCamera;
-
-    public float _moveSpeed = 5f; // Vitesse de déplacement
-    public float _mouseSensitivity = 70f; // Sensibilité de la souris
-
-    private float _xRotation = 0f;
-
     private Vector3 _initialPosition;
     private Quaternion _initialRotation;
+    private float _xRotation = 0f;
+    private float _currentYaw = 0f;  // nouveau : pour lerp horizontal
+    private float _targetYaw = 0f;
 
     void Start()
     {
         _controller = GetComponent<CharacterController>();
         _playerCamera = Camera.main.transform;
 
-        // Cache et verrouille le curseur au centre de l'écran
         Cursor.lockState = CursorLockMode.Locked;
-
-        // Réinitialise la rotation de la caméra pour regarder vers l'avant
         _xRotation = 0f;
         _playerCamera.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
-        transform.rotation = Quaternion.Euler(0f, 0f, 0f); // Réinitialise la rotation du joueur
-
-        //ResourceManager._Instance.AddResources(reward);
-        //ResourceManager._Instance.AddResources(reward);
+        transform.rotation = Quaternion.Euler(0f, 0f, 0f);
 
         _initialPosition = transform.position;
         _initialRotation = transform.rotation;
-
     }
 
     void Update()
     {
-        // Mouvement du joueur
+        Vector3 velocity = _controller.velocity;
+        bool isMoving = velocity.magnitude > 0.1f;
+
+        if (isMoving && !_footstepAudio.isPlaying)
+            _footstepAudio.Play();
+        else if (!isMoving && _footstepAudio.isPlaying)
+            _footstepAudio.Stop();
+
         float x = Input.GetAxis("Horizontal") * _moveSpeed * Time.deltaTime;
         float z = Input.GetAxis("Vertical") * _moveSpeed * Time.deltaTime;
         Vector3 move = transform.right * x + transform.forward * z;
         _controller.Move(move);
 
-        // Rotation de la caméra avec la souris
+        // Bloque rotation si Alt gauche enfoncé
+        if (Input.GetKey(KeyCode.LeftAlt))
+            return;
+
         float mouseX = Input.GetAxis("Mouse X") * _mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * _mouseSensitivity * Time.deltaTime;
 
         _xRotation -= mouseY;
-        _xRotation = Mathf.Clamp(_xRotation, -90f, 90f); // Limite la rotation verticale
+        _xRotation = Mathf.Clamp(_xRotation, -90f, 90f);
 
         _playerCamera.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
-        transform.Rotate(Vector3.up * mouseX);
+
+        _targetYaw += mouseX;
+        _currentYaw = Mathf.Lerp(_currentYaw, _targetYaw, Time.deltaTime * _smoothing);
+
+        transform.rotation = Quaternion.Euler(0f, _currentYaw, 0f);
     }
 
     public void ResetPlayer()
     {
         transform.position = _initialPosition;
         transform.rotation = _initialRotation;
-        // Remettre la vie au max :
         HeroHealth._Instance.ResetHealth();
     }
 }

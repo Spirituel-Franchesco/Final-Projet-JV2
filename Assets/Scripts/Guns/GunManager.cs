@@ -3,11 +3,13 @@ using TMPro;
 
 public class GunManager : MonoBehaviour
 {
-    public static GunManager _Instance;
+    public static GunManager _InstanceGunManager;
 
     public TextMeshProUGUI _ammoText;
     public TextMeshProUGUI _gunNameText; // ← Optionnel pour afficher le nom du gun
     public Gun[] _allGuns;
+    public bool[] GunsOwned => _gunsOwned; // Propriété pour accéder à la liste des armes possédées
+
     public int _money = 100;
 
     private bool[] _gunsOwned;
@@ -15,71 +17,72 @@ public class GunManager : MonoBehaviour
 
     private void Awake()
     {
-        if (_Instance == null) _Instance = this;
+        if (_InstanceGunManager == null) _InstanceGunManager = this;
     }
 
     private void Start()
     {
         _gunsOwned = new bool[_allGuns.Length];
-        for (int i = 0; i < _gunsOwned.Length; i++)
-            _gunsOwned[i] = true;  // ← toutes les armes sont considérées achetées
-
+        _gunsOwned[0] = true; // PA Gun gratuit
         EquipGun(0);
     }
-
+    
     private void Update()
     {
-        if (Input.GetButtonDown("Fire1") && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        if (_currentGun != null && Input.GetButtonDown("Fire1"))
         {
-            _currentGun?.Shoot();
+            _currentGun.Shoot();
+            UpdateAmmoUI();
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (_currentGun != null && Input.GetKeyDown(KeyCode.R))
         {
-            //TryReload();
+            ReloadCurrentGun();
         }
-
-        // Changement d'arme : touches 1, 2, 3
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            if (_gunsOwned[0]) EquipGun(0);
-            else Debug.Log("Arme 1 non achetée");
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            if (_gunsOwned.Length > 1 && _gunsOwned[1]) EquipGun(1);
-            else Debug.Log("Arme 2 non achetée");
-        }
-
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            if (_gunsOwned.Length > 2 && _gunsOwned[2]) EquipGun(2);
-            else Debug.Log("Arme 3 non achetée");
-        }
-
-        UpdateAmmoUI();
     }
-
 
     public void EquipGun(int index)
     {
         for (int i = 0; i < _allGuns.Length; i++)
+        {
             _allGuns[i].gameObject.SetActive(i == index);
+        }
 
         _currentGun = _allGuns[index];
         UpdateAmmoUI();
         UpdateGunNameUI();
     }
 
-    public void BuyGun(int index)
+    public void TryBuyAndEquipGun(int index)
     {
+        if (_gunsOwned[index])
+        {
+            EquipGun(index); // déjà acheté → juste équiper
+            Debug.Log($"Arme {index + 1} équipée.");
+            return;
+        }
+
         Gun gunToBuy = _allGuns[index];
 
-        // TEMPORAIRE : on force l'arme comme "achetée" sans retirer de l'argent
-        _gunsOwned[index] = true;
-        EquipGun(index);
-        Debug.Log($"[TEST] Arme {index + 1} débloquée et équipée.");
+        if (ResourceManager._InstanceResource.SpendResource(gunToBuy._price))
+        {
+            _gunsOwned[index] = true; // on marque comme achetée → reste permanent
+            EquipGun(index);
+            Debug.Log($"Arme {index + 1} achetée et équipée !");
+        }
+        else
+        {
+            Debug.Log("Pas assez de ressources pour acheter cette arme !");
+        }
+    }
+
+    public void ReloadCurrentGun()
+    {
+        if (_currentGun != null && !_currentGun._isReloading)
+        {
+            _currentGun.StartReload();
+            UpdateAmmoUI();
+        }
     }
 
     private void UpdateAmmoUI()

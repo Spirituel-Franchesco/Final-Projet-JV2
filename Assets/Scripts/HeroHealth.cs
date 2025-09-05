@@ -7,19 +7,13 @@ public class HeroHealth : MonoBehaviour
     public event PlayerDeathHandler _OnPlayerDeath; // Événement déclenché quand le joueur meurt  
     public static HeroHealth _Instance;
 
-    //[SerializeField] private Animator _animator;  
     [SerializeField] private HealthBar _healthBar;
-    [SerializeField] private float _invincibilityDuration = 10f; // Durée d'invincibilité en secondes  
-    [SerializeField] private float _invincibilityCooldown = 5f; // Temps de recharge en secondes  
     [SerializeField] private int _maxHealth = 100;
     [SerializeField] private int _currentHealth;
 
     private Vector3 _initialPosition;
     private Quaternion _initialRotation;
-
-    private bool _isInvincible = false;
     private bool _isCooldownActive = false;
-    private float _cooldownTimer = 1.5f;
 
     private void Awake()
     {
@@ -51,12 +45,7 @@ public class HeroHealth : MonoBehaviour
         // Gestion du cooldown  
         if (_isCooldownActive)
         {
-            _cooldownTimer += Time.deltaTime;
-            if (_cooldownTimer >= _invincibilityCooldown)
-            {
-                _isCooldownActive = false;
-                _cooldownTimer = 0f;
-            }
+            _isCooldownActive = false;
         }
     }
 
@@ -69,9 +58,7 @@ public class HeroHealth : MonoBehaviour
 
         if (_currentHealth <= 0)
         {
-            _currentHealth = 0;
-            //_animationLinker.Death();  
-            //_animator.SetBool("IsDeath", true);  
+            _currentHealth = 0;  
             _OnPlayerDeath?.Invoke(); // ça déclenchera ShowGameOver() 
             GetComponent<PlayerMovement>().enabled = false; // Désactiver le mouvement du joueur
             Debug.Log("Le joueur est mort !");  
@@ -83,7 +70,6 @@ public class HeroHealth : MonoBehaviour
         GetComponent<PlayerMovement>().enabled = true; // Réactiver le mouvement du joueur
         _currentHealth = _maxHealth;
         _healthBar.SetHealth(_currentHealth);
-        //_animator.SetBool("IsDeath", false); // Réinitialise l'animation de mort  
     }
 
     public bool IsAlive()
